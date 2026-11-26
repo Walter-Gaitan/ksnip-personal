@@ -2,6 +2,18 @@
 
 A personal Windows build of [ksnip](https://github.com/ksnip/ksnip), a screenshot tool with a tabbed editor, used as a free PicPick replacement.
 
+## Portable version
+
+This build is fully portable: nothing is installed and nothing is written to the Windows registry.
+
+- **The whole program is the `app` folder** (about 34 MB) that `build.cmd` produces. Copy it to a USB drive, OneDrive, or another PC and run `ksnip.exe`.
+- **Settings travel with it.** They are saved in `app\ksnip\ksnip.ini`, next to `ksnip.exe`. The file appears the first time a setting is saved.
+- **No prerequisites on the other PC.** The Qt and Visual C++ runtime DLLs are inside the folder.
+- **Start with Windows** (optional): press Win+R, type `shell:startup`, and put a shortcut to `ksnip.exe` there.
+- **Imgur upload** would also need the OpenSSL DLLs, which aren't included. Capture, edit, save and copy all work without them.
+
+The `app` folder isn't stored in git (it's build output). Build it with `build.cmd`, or download it from this repo's Releases if one has been published.
+
 ## What's different from upstream ksnip
 
 | Change | Where |
