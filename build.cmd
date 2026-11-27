@@ -6,7 +6,7 @@ setlocal
 set ROOT=%~dp0
 set ROOT=%ROOT:~0,-1%
 set PREFIX=%ROOT%\deps
-set QTDIR=C:\Qt\5.15.2\msvc2019_64
+if not defined QTDIR set QTDIR=C:\Qt\5.15.2\msvc2019_64
 set PYSCRIPTS=%APPDATA%\Python\Python314\Scripts
 
 for /f "usebackq tokens=*" %%i in (`"%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -property installationPath`) do set VSDIR=%%i

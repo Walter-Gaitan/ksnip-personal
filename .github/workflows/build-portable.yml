@@ -1,0 +1,51 @@
+name: build-portable
+
+# Builds the portable Windows app (the `app` folder from build.cmd) and
+# uploads it as a zip. Pushes to main also update the "portable-latest" release.
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main, 'claude/**' ]
+
+permissions:
+  contents: write
+
+jobs:
+  portable:
+    runs-on: windows-2022
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: '5.15.2'
+          host: 'windows'
+          arch: 'win64_msvc2019_64'
+
+      - name: Build with build.cmd
+        shell: cmd
+        run: |
+          set QTDIR=%QT_ROOT_DIR%
+          call build.cmd
+
+      - name: Zip app folder
+        shell: pwsh
+        run: Compress-Archive -Path app\* -DestinationPath ksnip-portable-windows.zip
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ksnip-portable-windows
+          path: app/
+
+      - name: Publish portable-latest release
+        if: github.ref == 'refs/heads/main'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: portable-latest
+          name: Portable build (latest main)
+          body: Unzip anywhere and run ksnip.exe. Built from ${{ github.sha }}.
+          prerelease: true
+          files: ksnip-portable-windows.zip
